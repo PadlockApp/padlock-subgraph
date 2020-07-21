@@ -1,0 +1,44 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Contract
+    network: ropsten
+    source:
+      address: "0x61EE6FEFE8C6B859c139A4b87F2AB3084e7B4dE3"
+      abi: Contract
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - Created
+        - Order
+        - OwnershipTransferred
+        - Payment
+        - PaymentContractChanged
+        - Purchased
+        - RoleGranted
+        - RoleRevoked
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: Created(indexed address,string,string,indexed uint256,uint256)
+          handler: handleCreated
+        - event: Order(indexed address,string,string,indexed uint256,uint256)
+          handler: handleOrder
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Payment(indexed address,uint256)
+          handler: handlePayment
+        - event: PaymentContractChanged(indexed address)
+          handler: handlePaymentContractChanged
+        - event: Purchased(indexed address,string,string,indexed uint256,uint256)
+          handler: handlePurchased
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: ./src/mapping.ts
