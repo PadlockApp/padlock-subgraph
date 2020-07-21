@@ -1,5 +1,5 @@
 {
-  "name": "Padlock",
+  "name": "padlock-subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",

@@ -1,6 +1,7 @@
-type ExampleEntity @entity {
+type Creation @entity {
   id: ID!
-  count: BigInt!
   creator: Bytes! # address
   hash: String! # string
+  description: String! # string
+  price: BigInt!
 }
