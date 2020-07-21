@@ -11,6 +11,7 @@ import {
   RoleRevoked,
 } from '../generated/Contract/Contract';
 import { Creation } from '../generated/schema';
+import { convertEthToDecimal } from './helpers';
 
 export function handleCreated(event: Created): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -21,7 +22,7 @@ export function handleCreated(event: Created): void {
   entity.creator = event.params.creator;
   entity.hash = event.params.hash;
   entity.description = event.params.description;
-  entity.price = event.params.price;
+  entity.price = convertEthToDecimal(event.params.price);
 
   // Entities can be written to the store with `.save()`
   entity.save();

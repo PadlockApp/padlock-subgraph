@@ -3,5 +3,5 @@ type Creation @entity {
   creator: Bytes! # address
   hash: String! # string
   description: String! # string
-  price: BigInt!
+  price: BigDecimal!
 }

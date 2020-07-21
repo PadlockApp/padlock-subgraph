@@ -69,12 +69,12 @@ export class Creation extends Entity {
     this.set("description", Value.fromString(value));
   }
 
-  get price(): BigInt {
+  get price(): BigDecimal {
     let value = this.get("price");
-    return value.toBigInt();
+    return value.toBigDecimal();
   }
 
-  set price(value: BigInt) {
-    this.set("price", Value.fromBigInt(value));
+  set price(value: BigDecimal) {
+    this.set("price", Value.fromBigDecimal(value));
   }
 }
