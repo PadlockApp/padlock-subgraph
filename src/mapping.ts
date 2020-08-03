@@ -57,7 +57,7 @@ export function handleCreated(event: Created): void {
   // - contract.paymentContract(...)
 }
 
-export function handleOrder(event: NewOrder): void {}
+export function handleNewOrder(event: NewOrder): void {}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
