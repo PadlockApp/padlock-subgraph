@@ -60,13 +60,13 @@ export class Creation extends Entity {
     this.set("hash", Value.fromString(value));
   }
 
-  get description(): string {
-    let value = this.get("description");
+  get metadataHash(): string {
+    let value = this.get("metadataHash");
     return value.toString();
   }
 
-  set description(value: string) {
-    this.set("description", Value.fromString(value));
+  set metadataHash(value: string) {
+    this.set("metadataHash", Value.fromString(value));
   }
 
   get price(): BigDecimal {

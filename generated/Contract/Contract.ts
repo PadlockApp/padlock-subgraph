@@ -31,7 +31,7 @@ export class Created__Params {
     return this._event.parameters[1].value.toString();
   }
 
-  get description(): string {
+  get metadataHash(): string {
     return this._event.parameters[2].value.toString();
   }
 
@@ -44,16 +44,16 @@ export class Created__Params {
   }
 }
 
-export class Order extends ethereum.Event {
-  get params(): Order__Params {
-    return new Order__Params(this);
+export class NewOrder extends ethereum.Event {
+  get params(): NewOrder__Params {
+    return new NewOrder__Params(this);
   }
 }
 
-export class Order__Params {
-  _event: Order;
+export class NewOrder__Params {
+  _event: NewOrder;
 
-  constructor(event: Order) {
+  constructor(event: NewOrder) {
     this._event = event;
   }
 
@@ -61,20 +61,32 @@ export class Order__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get hash(): string {
-    return this._event.parameters[1].value.toString();
+  get creator(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 
-  get description(): string {
+  get hash(): string {
     return this._event.parameters[2].value.toString();
   }
 
+  get metadataHash(): string {
+    return this._event.parameters[3].value.toString();
+  }
+
   get id(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[4].value.toBigInt();
   }
 
   get price(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get recipient(): string {
+    return this._event.parameters[6].value.toString();
+  }
+
+  get orderId(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
   }
 }
 
@@ -120,6 +132,10 @@ export class Payment__Params {
   get amount(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
+
+  get orderId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
 }
 
 export class PaymentContractChanged extends ethereum.Event {
@@ -153,24 +169,32 @@ export class Purchased__Params {
     this._event = event;
   }
 
-  get creator(): Address {
+  get buyer(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get hash(): string {
-    return this._event.parameters[1].value.toString();
+  get creator(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 
-  get description(): string {
+  get hash(): string {
     return this._event.parameters[2].value.toString();
   }
 
-  get id(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get metadataHash(): string {
+    return this._event.parameters[3].value.toString();
+  }
+
+  get creationId(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get orderId(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 
   get price(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+    return this._event.parameters[6].value.toBigInt();
   }
 }
 
@@ -226,13 +250,13 @@ export class RoleRevoked__Params {
   }
 }
 
-export class Contract__creationsResult {
-  value0: Address;
-  value1: string;
-  value2: string;
-  value3: BigInt;
+export class Contract__buyerSalesResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: Address;
+  value3: string;
 
-  constructor(value0: Address, value1: string, value2: string, value3: BigInt) {
+  constructor(value0: BigInt, value1: BigInt, value2: Address, value3: string) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
@@ -241,10 +265,88 @@ export class Contract__creationsResult {
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
+    map.set("value3", ethereum.Value.fromString(this.value3));
+    return map;
+  }
+}
+
+export class Contract__creationsResult {
+  value0: BigInt;
+  value1: Address;
+  value2: string;
+  value3: string;
+  value4: BigInt;
+
+  constructor(
+    value0: BigInt,
+    value1: Address,
+    value2: string,
+    value3: string,
+    value4: BigInt
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromAddress(this.value1));
     map.set("value2", ethereum.Value.fromString(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set("value3", ethereum.Value.fromString(this.value3));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    return map;
+  }
+}
+
+export class Contract__creatorSalesResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: Address;
+  value3: string;
+
+  constructor(value0: BigInt, value1: BigInt, value2: Address, value3: string) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
+    map.set("value3", ethereum.Value.fromString(this.value3));
+    return map;
+  }
+}
+
+export class Contract__ordersResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: Address;
+  value3: string;
+
+  constructor(value0: BigInt, value1: BigInt, value2: Address, value3: string) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
+    map.set("value3", ethereum.Value.fromString(this.value3));
     return map;
   }
 }
@@ -292,6 +394,50 @@ export class Contract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  buyerSales(param0: Address, param1: BigInt): Contract__buyerSalesResult {
+    let result = super.call(
+      "buyerSales",
+      "buyerSales(address,uint256):(uint256,uint256,address,string)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+
+    return new Contract__buyerSalesResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toAddress(),
+      result[3].toString()
+    );
+  }
+
+  try_buyerSales(
+    param0: Address,
+    param1: BigInt
+  ): ethereum.CallResult<Contract__buyerSalesResult> {
+    let result = super.tryCall(
+      "buyerSales",
+      "buyerSales(address,uint256):(uint256,uint256,address,string)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new Contract__buyerSalesResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toAddress(),
+        value[3].toString()
+      )
+    );
+  }
+
   commission(): BigInt {
     let result = super.call("commission", "commission():(uint256)", []);
 
@@ -310,15 +456,16 @@ export class Contract extends ethereum.SmartContract {
   creations(param0: BigInt): Contract__creationsResult {
     let result = super.call(
       "creations",
-      "creations(uint256):(address,string,string,uint256)",
+      "creations(uint256):(uint256,address,string,string,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new Contract__creationsResult(
-      result[0].toAddress(),
-      result[1].toString(),
+      result[0].toBigInt(),
+      result[1].toAddress(),
       result[2].toString(),
-      result[3].toBigInt()
+      result[3].toString(),
+      result[4].toBigInt()
     );
   }
 
@@ -327,7 +474,7 @@ export class Contract extends ethereum.SmartContract {
   ): ethereum.CallResult<Contract__creationsResult> {
     let result = super.tryCall(
       "creations",
-      "creations(uint256):(address,string,string,uint256)",
+      "creations(uint256):(uint256,address,string,string,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -336,10 +483,55 @@ export class Contract extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new Contract__creationsResult(
-        value[0].toAddress(),
-        value[1].toString(),
+        value[0].toBigInt(),
+        value[1].toAddress(),
         value[2].toString(),
-        value[3].toBigInt()
+        value[3].toString(),
+        value[4].toBigInt()
+      )
+    );
+  }
+
+  creatorSales(param0: Address, param1: BigInt): Contract__creatorSalesResult {
+    let result = super.call(
+      "creatorSales",
+      "creatorSales(address,uint256):(uint256,uint256,address,string)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+
+    return new Contract__creatorSalesResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toAddress(),
+      result[3].toString()
+    );
+  }
+
+  try_creatorSales(
+    param0: Address,
+    param1: BigInt
+  ): ethereum.CallResult<Contract__creatorSalesResult> {
+    let result = super.tryCall(
+      "creatorSales",
+      "creatorSales(address,uint256):(uint256,uint256,address,string)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new Contract__creatorSalesResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toAddress(),
+        value[3].toString()
       )
     );
   }
@@ -483,6 +675,56 @@ export class Contract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  numOrders(): BigInt {
+    let result = super.call("numOrders", "numOrders():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_numOrders(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("numOrders", "numOrders():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  orders(param0: BigInt): Contract__ordersResult {
+    let result = super.call(
+      "orders",
+      "orders(uint256):(uint256,uint256,address,string)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return new Contract__ordersResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toAddress(),
+      result[3].toString()
+    );
+  }
+
+  try_orders(param0: BigInt): ethereum.CallResult<Contract__ordersResult> {
+    let result = super.tryCall(
+      "orders",
+      "orders(uint256):(uint256,uint256,address,string)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new Contract__ordersResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toAddress(),
+        value[3].toString()
+      )
+    );
+  }
+
   owner(): Address {
     let result = super.call("owner", "owner():(address)", []);
 
@@ -569,16 +811,8 @@ export class CompletePurchaseCall__Inputs {
     this._call = call;
   }
 
-  get id(): BigInt {
+  get orderId(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get buyer(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get decryptionKey(): string {
-    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -611,7 +845,7 @@ export class CreateCall__Inputs {
     return this._call.inputValues[0].value.toString();
   }
 
-  get description(): string {
+  get metadataHash(): string {
     return this._call.inputValues[1].value.toString();
   }
 
@@ -681,6 +915,10 @@ export class OrderCall__Inputs {
 
   get id(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get recipient(): string {
+    return this._call.inputValues[1].value.toString();
   }
 }
 

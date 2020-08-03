@@ -2,6 +2,6 @@ type Creation @entity {
   id: ID!
   creator: Bytes! # address
   hash: String! # string
-  description: String! # string
+  metadataHash: String! # string
   price: BigDecimal!
 }

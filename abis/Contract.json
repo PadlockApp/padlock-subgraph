@@ -28,7 +28,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "description",
+        "name": "metadataHash",
         "type": "string"
       },
       {
@@ -57,6 +57,12 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "string",
         "name": "hash",
@@ -65,7 +71,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "description",
+        "name": "metadataHash",
         "type": "string"
       },
       {
@@ -79,9 +85,21 @@
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "recipient",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "orderId",
+        "type": "uint256"
       }
     ],
-    "name": "Order",
+    "name": "NewOrder",
     "type": "event"
   },
   {
@@ -117,6 +135,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "orderId",
+        "type": "uint256"
       }
     ],
     "name": "Payment",
@@ -141,6 +165,12 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "creator",
         "type": "address"
       },
@@ -153,13 +183,19 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "description",
+        "name": "metadataHash",
         "type": "string"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "id",
+        "name": "creationId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "orderId",
         "type": "uint256"
       },
       {
@@ -237,6 +273,21 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "buyerSales",
+    "outputs": [
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" },
+      { "internalType": "uint256", "name": "creationId", "type": "uint256" },
+      { "internalType": "address", "name": "buyer", "type": "address" },
+      { "internalType": "string", "name": "recipient", "type": "string" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "commission",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -245,9 +296,7 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "id", "type": "uint256" },
-      { "internalType": "address", "name": "buyer", "type": "address" },
-      { "internalType": "string", "name": "decryptionKey", "type": "string" }
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" }
     ],
     "name": "completePurchase",
     "outputs": [],
@@ -257,7 +306,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "hash", "type": "string" },
-      { "internalType": "string", "name": "description", "type": "string" },
+      { "internalType": "string", "name": "metadataHash", "type": "string" },
       { "internalType": "uint256", "name": "price", "type": "uint256" }
     ],
     "name": "create",
@@ -269,10 +318,26 @@
     "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "creations",
     "outputs": [
+      { "internalType": "uint256", "name": "creationId", "type": "uint256" },
       { "internalType": "address", "name": "creator", "type": "address" },
       { "internalType": "string", "name": "hash", "type": "string" },
-      { "internalType": "string", "name": "description", "type": "string" },
+      { "internalType": "string", "name": "metadataHash", "type": "string" },
       { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "creatorSales",
+    "outputs": [
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" },
+      { "internalType": "uint256", "name": "creationId", "type": "uint256" },
+      { "internalType": "address", "name": "buyer", "type": "address" },
+      { "internalType": "string", "name": "recipient", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -347,10 +412,32 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
+    "inputs": [],
+    "name": "numOrders",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "string", "name": "recipient", "type": "string" }
+    ],
     "name": "order",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "orders",
+    "outputs": [
+      { "internalType": "uint256", "name": "orderId", "type": "uint256" },
+      { "internalType": "uint256", "name": "creationId", "type": "uint256" },
+      { "internalType": "address", "name": "buyer", "type": "address" },
+      { "internalType": "string", "name": "recipient", "type": "string" }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

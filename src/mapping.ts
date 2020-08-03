@@ -2,7 +2,7 @@ import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Contract,
   Created,
-  Order,
+  NewOrder,
   OwnershipTransferred,
   Payment,
   PaymentContractChanged,
@@ -21,7 +21,7 @@ export function handleCreated(event: Created): void {
   // Entity fields can be set based on event parameters
   entity.creator = event.params.creator;
   entity.hash = event.params.hash;
-  entity.description = event.params.description;
+  entity.metadataHash = event.params.metadataHash;
   entity.price = convertEthToDecimal(event.params.price);
 
   // Entities can be written to the store with `.save()`
@@ -57,7 +57,7 @@ export function handleCreated(event: Created): void {
   // - contract.paymentContract(...)
 }
 
-export function handleOrder(event: Order): void {}
+export function handleOrder(event: NewOrder): void {}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
