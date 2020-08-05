@@ -13,14 +13,8 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - Created
-        - NewOrder
-        - OwnershipTransferred
-        - Payment
-        - PaymentContractChanged
-        - Purchased
-        - RoleGranted
-        - RoleRevoked
+        - Creation
+        - Order
       abis:
         - name: Contract
           file: ./abis/Contract.json

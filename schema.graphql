@@ -4,4 +4,12 @@ type Creation @entity {
   hash: String! # string
   metadataHash: String! # string
   price: BigDecimal!
+  orders: [Order!] @derivedFrom(field: "creation")
+}
+
+type Order @entity {
+  id: ID!
+  creation: Creation
+  buyer: Bytes! # address
+  recipient: String! # string
 }

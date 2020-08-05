@@ -10,7 +10,7 @@ import {
   RoleGranted,
   RoleRevoked,
 } from '../generated/Contract/Contract';
-import { Creation } from '../generated/schema';
+import { Creation, Order } from '../generated/schema';
 import { convertEthToDecimal } from './helpers';
 
 export function handleCreated(event: Created): void {
@@ -61,7 +61,18 @@ export function handleNewOrder(event: NewOrder): void {}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
-export function handlePayment(event: Payment): void {}
+export function handlePayment(event: Payment): void {
+  let entity = new Order(event.params.orderId.toHex());
+  let contract = Contract.bind(event.address);
+  let contractOrder = contract.orders(event.params.orderId);
+
+  entity.creation = contractOrder.value1.toHex();
+  entity.buyer = contractOrder.value2;
+  entity.recipient = contractOrder.value3;
+
+  // Entities can be written to the store with `.save()`
+  entity.save();
+}
 
 export function handlePaymentContractChanged(
   event: PaymentContractChanged
